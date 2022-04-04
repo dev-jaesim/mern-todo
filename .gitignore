@@ -1,6 +1,7 @@
 /node_modules
 /build
 /uploads
+/config
 
 dev.js
 

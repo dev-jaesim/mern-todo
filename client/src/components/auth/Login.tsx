@@ -1,4 +1,6 @@
+import axios from 'axios';
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 interface props {
     renderSignup: () => void;
@@ -7,6 +9,20 @@ interface props {
 function Login({renderSignup}: props) {
     const [Username, setUsername] = React.useState('');
     const [Password, setPassword] = React.useState('');
+    const navigate = useNavigate();
+
+    const onSubmit = (): void => {
+        axios.post('/api/login', { username: Username, password: Password })
+            .then(response => {
+                if(response.status === 200) {
+                    const token = response.data.token;
+                    localStorage.setItem('token', token);
+                    navigate('/dashboard', { replace: true });
+                } else {
+
+                }
+            });
+    };
     
     return (
         <div style={{height: '300px'}}>
@@ -23,7 +39,7 @@ function Login({renderSignup}: props) {
                 <div>
                     <p>No account? <span onClick={renderSignup} className='text-green-400 cursor-pointer'>Sign up</span></p>
                 </div>
-                <button className='rounded-md px-6 py-3 font-bold bg-green-400 text-white'>Login</button>
+                <button onClick={onSubmit} className='rounded-md px-6 py-3 font-bold bg-green-400 text-white'>Login</button>
             </div>
         </div>
     );
